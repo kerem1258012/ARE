@@ -26,8 +26,8 @@
 <audio id="ttsAudio"></audio>
 
 <script>
-// Burada backend URL’i Vercel’e deploy ettikten sonra değiştirilecek
-const BACKEND_URL = "https://<senin-vercel-proje>.vercel.app/api/ask";
+// Buraya Vercel backend URL'ini koy
+const BACKEND_URL = "https://are-53zlwxmhn-kerem1258012s-projects.vercel.app/api/ask";
 
 async function sendMessage() {
   const input = document.getElementById('userInput');
@@ -35,6 +35,7 @@ async function sendMessage() {
   const text  = input.value.trim();
   if (!text) return;
 
+  // Kullanıcı mesajı
   const userMsg = document.createElement('div');
   userMsg.className = 'msg user';
   userMsg.textContent = text;
@@ -52,6 +53,7 @@ async function sendMessage() {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
 
+    // AI cevabı
     const aiMsg = document.createElement('div');
     aiMsg.className = 'msg ai';
     const label = document.createElement('div');
@@ -60,7 +62,7 @@ async function sendMessage() {
     aiMsg.appendChild(label);
 
     const msgText = document.createElement('div');
-    msgText.textContent = data.reply;
+    msgText.textContent = data.reply ?? "Cevap yok";
     aiMsg.appendChild(msgText);
 
     chat.appendChild(aiMsg);
