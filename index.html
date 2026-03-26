@@ -3,579 +3,619 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arenta X Ai | Advanced Terminal</title>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>ARENTA - İşlevsel Yapay Zeka Arayüzü</title>
     
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
+        /* GÖRSEL TASARIM REHBERİ:
+           Minimalist, göz yormayan, iş odaklı karanlık tema.
+           Gereksiz animasyon ve efektlerden arındırıldı.
+        */
         :root {
-            --bg-base: #020204;
-            --panel-bg: rgba(15, 15, 22, 0.6);
-            --border-glow: rgba(138, 43, 226, 0.3);
-            --accent-primary: #8A2BE2;
-            --accent-secondary: #00FFFF;
-            --text-main: #e2e2e2;
-            --text-muted: #888;
-            --error-color: #ff3366;
-            --success-color: #00ff99;
+            --bg-main: #0b0e14;
+            --bg-sidebar: #151921;
+            --bg-card: #1c232d;
+            --border-color: #2d3748;
+            --text-primary: #f7fafc;
+            --text-secondary: #a0aec0;
+            --accent: #6366f1; /* Indigo */
+            --accent-hover: #4f46e5;
+            --code-bg: #000000;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
-            font-family: 'Space Grotesk', sans-serif;
-            background-color: var(--bg-base);
-            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-primary);
             height: 100vh;
             display: flex;
             overflow: hidden;
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(138, 43, 226, 0.05) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(0, 255, 255, 0.05) 0%, transparent 40%);
         }
 
-        /* Düzen: Sol Sidebar ve Sağ Sohbet */
+        /* --- SOL PANEL (NAVIGASYON & OTURUMLAR) --- */
         #sidebar {
             width: 300px;
-            background: rgba(5, 5, 8, 0.8);
-            border-right: 1px solid rgba(255,255,255,0.05);
-            backdrop-filter: blur(10px);
+            background-color: var(--bg-sidebar);
+            border-right: 1px solid var(--border-color);
             display: flex;
             flex-direction: column;
+            transition: all 0.3s ease;
+            z-index: 50;
+        }
+
+        .sidebar-header {
             padding: 20px;
-            z-index: 20;
-            transform: translateX(0);
-            transition: transform 0.3s ease;
+            border-bottom: 1px solid var(--border-color);
         }
 
-        #sidebar.hidden { transform: translateX(-100%); position: absolute; }
-
-        .brand {
-            font-size: 1.5rem;
-            font-weight: 700;
-            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 30px;
-            text-align: center;
-            letter-spacing: 2px;
+        .new-chat-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: 0.2s;
         }
 
-        .settings-group { margin-bottom: 20px; }
-        .settings-group label { display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px; }
-        .settings-group input, .settings-group select {
-            width: 100%; padding: 10px; border-radius: 8px;
-            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);
-            color: white; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem;
-        }
-        .settings-group input:focus { border-color: var(--accent-secondary); outline: none; }
+        .new-chat-btn:hover { background-color: var(--accent-hover); }
 
-        .btn {
-            width: 100%; padding: 12px; border-radius: 8px; border: none;
-            background: rgba(255,255,255,0.05); color: white; cursor: pointer;
-            font-weight: 600; transition: 0.2s; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 10px;
+        .session-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
         }
-        .btn:hover { background: rgba(255,255,255,0.1); border-color: var(--accent-primary); }
-        .btn-primary { background: linear-gradient(45deg, var(--accent-primary), #4B0082); }
-        .btn-primary:hover { background: linear-gradient(45deg, var(--accent-secondary), var(--accent-primary)); }
-        .btn-danger { background: rgba(255, 51, 102, 0.1); color: var(--error-color); border: 1px solid var(--error-color); }
 
-        /* Ana Sohbet Alanı */
-        #main-area {
-            flex: 1; display: flex; flex-direction: column; position: relative;
+        .session-item {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: transparent;
+            border: 1px solid transparent;
+            transition: 0.2s;
+        }
+
+        .session-item:hover { background: var(--bg-card); border-color: var(--border-color); }
+        .session-item.active { background: var(--bg-card); border-color: var(--accent); }
+
+        .session-title {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 180px;
+        }
+
+        /* --- MODEL SEÇİMİ (GİZLİ TASARIM) --- */
+        .model-config {
+            padding: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .hidden-select-container {
+            position: relative;
+            background: rgba(0,0,0,0.2);
+            border-radius: 6px;
+            padding: 10px;
+            border: 1px dashed var(--border-color);
+        }
+
+        .hidden-select-container label {
+            display: block;
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+        }
+
+        #model-engine {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: transparent; /* Varsayılan olarak görünmez */
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+            cursor: pointer;
+            outline: none;
+            transition: color 0.3s;
+        }
+
+        .hidden-select-container:hover #model-engine {
+            color: var(--accent); /* Üzerine gelince belirir */
+        }
+
+        /* --- ANA İÇERİK ALANI --- */
+        #main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
         }
 
         header {
-            padding: 15px 30px; display: flex; align-items: center; gap: 15px;
-            background: rgba(2, 2, 4, 0.7); border-bottom: 1px solid rgba(255,255,255,0.05);
-            backdrop-filter: blur(10px);
+            height: 64px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            background: var(--bg-sidebar);
         }
 
-        .toggle-btn {
-            background: transparent; border: none; color: white; font-size: 1.2rem; cursor: pointer;
+        .search-box {
+            background: var(--bg-main);
+            border: 1px solid var(--border-color);
+            padding: 8px 15px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 300px;
         }
 
-        #chat-window {
-            flex: 1; overflow-y: auto; padding: 30px; display: flex; flex-direction: column; gap: 20px;
-            scroll-behavior: smooth;
+        .search-box input {
+            background: transparent;
+            border: none;
+            color: white;
+            outline: none;
+            width: 100%;
+            font-size: 0.85rem;
         }
 
-        #chat-window::-webkit-scrollbar { width: 5px; }
-        #chat-window::-webkit-scrollbar-thumb { background: rgba(138, 43, 226, 0.4); border-radius: 10px; }
-
-        .message-row { display: flex; width: 100%; }
-        .message-row.user { justify-content: flex-end; }
-        .message-row.ai { justify-content: flex-start; }
-
-        .message-bubble {
-            max-width: 80%; padding: 15px 20px; border-radius: 16px;
-            font-size: 0.95rem; line-height: 1.6; word-wrap: break-word;
-            position: relative; animation: popIn 0.3s ease-out;
+        #chat-scroller {
+            flex: 1;
+            overflow-y: auto;
+            padding: 40px 0;
+            display: flex;
+            flex-direction: column;
         }
 
-        @keyframes popIn { 0% { opacity: 0; transform: scale(0.95) translateY(10px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
-
-        .user .message-bubble {
-            background: rgba(0, 255, 255, 0.05); border: 1px solid rgba(0, 255, 255, 0.2);
-            border-bottom-right-radius: 4px; box-shadow: 0 4px 15px rgba(0, 255, 255, 0.05);
+        /* --- MESAJ TASARIMI --- */
+        .message-wrapper {
+            width: 100%;
+            padding: 25px 20%;
+            transition: background 0.2s;
         }
 
-        .ai .message-bubble {
-            background: var(--panel-bg); border: 1px solid rgba(138, 43, 226, 0.2);
-            border-bottom-left-radius: 4px; box-shadow: 0 4px 15px rgba(138, 43, 226, 0.05);
+        .message-wrapper.ai { background-color: rgba(255,255,255,0.02); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); }
+
+        .message-content {
+            display: flex;
+            gap: 25px;
+            max-width: 1000px;
+            margin: 0 auto;
         }
 
-        .system-error { border-color: var(--error-color) !important; color: #ff9999; }
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
 
-        /* Gelişmiş Markdown ve Kod Tasarımı */
+        .user-avatar { background: var(--accent); color: white; }
+        .ai-avatar { background: #10a37f; color: white; }
+
+        .text-area {
+            flex: 1;
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--text-primary);
+            overflow-wrap: break-word;
+        }
+
+        /* Markdown Stilleri */
         pre {
-            background: #0d0d12; padding: 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);
-            overflow-x: auto; margin: 10px 0; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;
+            background: var(--code-bg);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            overflow-x: auto;
+            border: 1px solid var(--border-color);
             position: relative;
         }
-        code { font-family: 'JetBrains Mono', monospace; color: var(--accent-secondary); }
-        .ai .message-bubble p { margin-bottom: 10px; }
-        .ai .message-bubble p:last-child { margin-bottom: 0; }
 
-        .copy-btn {
-            position: absolute; top: 5px; right: 5px; background: rgba(255,255,255,0.1); border: none;
-            color: white; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 0.7rem;
+        code { font-family: 'Fira Code', monospace; font-size: 0.9rem; }
+
+        .copy-code-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            border-radius: 4px;
+            font-size: 0.7rem;
+            cursor: pointer;
         }
 
-        .meta-data {
-            font-size: 0.7rem; color: var(--text-muted); margin-top: 8px; display: flex; justify-content: space-between;
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 15px 0;
         }
 
-        /* Alt Giriş Alanı */
-        #input-area {
-            padding: 20px 30px; background: rgba(2, 2, 4, 0.8); backdrop-filter: blur(15px);
-            border-top: 1px solid rgba(255,255,255,0.05);
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            text-align: left;
         }
 
-        .input-container {
-            display: flex; gap: 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 20px; padding: 10px; transition: 0.3s;
+        th { background: var(--bg-card); }
+
+        /* --- GİRİŞ ALANI --- */
+        #input-container {
+            padding: 30px 20%;
+            background: linear-gradient(transparent, var(--bg-main) 30%);
         }
-        .input-container:focus-within { border-color: var(--accent-primary); box-shadow: 0 0 20px rgba(138, 43, 226, 0.1); }
+
+        .input-box-wrapper {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
 
         textarea {
-            flex: 1; background: transparent; border: none; color: white; padding: 10px;
-            font-size: 1rem; resize: none; min-height: 44px; max-height: 150px; outline: none;
+            width: 100%;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: white;
+            font-size: 1rem;
+            resize: none;
+            max-height: 200px;
+            min-height: 24px;
+            padding: 5px;
         }
 
-        .action-btn {
-            width: 44px; height: 44px; border-radius: 12px; border: none; background: rgba(255,255,255,0.05);
-            color: white; font-size: 1.2rem; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center;
+        .input-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border-color);
         }
-        .action-btn:hover { background: rgba(255,255,255,0.1); color: var(--accent-secondary); }
-        .action-btn.send { background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); color: #000; }
-        .action-btn.recording { background: var(--error-color); animation: pulse 1.5s infinite; color: white; }
 
-        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255, 51, 102, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(255, 51, 102, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 51, 102, 0); } }
-        
-        /* Toast Bildirimleri */
-        #toast-container { position: fixed; bottom: 100px; right: 20px; display: flex; flex-direction: column; gap: 10px; z-index: 100; }
-        .toast { background: rgba(15, 15, 22, 0.9); border-left: 4px solid var(--accent-primary); color: white; padding: 12px 20px; border-radius: 4px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); animation: slideIn 0.3s ease forwards; }
-        @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+        .action-group { display: flex; gap: 10px; }
+
+        .icon-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 1.1rem;
+            padding: 8px;
+            border-radius: 6px;
+            transition: 0.2s;
+        }
+
+        .icon-btn:hover { background: var(--bg-main); color: var(--accent); }
+        .send-btn { background: var(--accent); color: white; padding: 8px 16px; border-radius: 6px; font-weight: 600; display: flex; align-items: center; gap: 8px; border: none; cursor: pointer; }
+        .send-btn:hover { background: var(--accent-hover); }
+        .send-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-main); }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text-secondary); }
 
     </style>
 </head>
 <body>
 
-    <div id="sidebar">
-        <div class="brand">ARENTA X AI</div>
-        
-        <div class="settings-group">
-            <label><i class="fa-solid fa-key"></i> Groq API Key</label>
-            <input type="password" id="api-key" value="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" placeholder="gsk_...">
+    <aside id="sidebar">
+        <div class="sidebar-header">
+            <button class="new-chat-btn" id="new-chat">
+                <i class="fa-solid fa-plus"></i> Yeni Oturum
+            </button>
         </div>
 
-        <div class="settings-group">
-            <label><i class="fa-solid fa-microchip"></i> Model Seçimi</label>
-            <select id="model-select">
-                <option value="llama-3.3-70b-versatile">Llama 3.3 70B (Önerilen)</option>
-                <option value="llama3-8b-8192">Llama 3 8B (Hızlı)</option>
-                <option value="mixtral-8x7b-32768">Mixtral 8x7B (Geniş Bağlam)</option>
-            </select>
-        </div>
+        <div class="session-list" id="session-list">
+            </div>
 
-        <div class="settings-group">
-            <label><i class="fa-solid fa-volume-high"></i> Ses Sentezi (TTS)</label>
-            <select id="voice-select">
-                <option value="auto">Sistem Otomatik Türkçe</option>
-            </select>
+        <div class="model-config">
+            <div class="hidden-select-container">
+                <label><i class="fa-solid fa-microchip"></i> MODEL KATMANI</label>
+                <select id="model-engine">
+                    <option value="llama-3.3-70b-versatile">Llama 3.3 70B Ultra</option>
+                    <option value="llama3-8b-8192">Llama 3 8B Fast</option>
+                    <option value="mixtral-8x7b-32768">Mixtral Neural</option>
+                </select>
+            </div>
+            
+            <div style="margin-top: 15px;">
+                <button class="icon-btn" onclick="toggleSettings()" style="font-size: 0.8rem; display: flex; align-items: center; gap: 5px;">
+                    <i class="fa-solid fa-sliders"></i> Parametre Ayarları
+                </button>
+            </div>
         </div>
+    </aside>
 
-        <button class="btn btn-primary" id="save-settings"><i class="fa-solid fa-save"></i> Ayarları Kaydet</button>
-        <button class="btn btn-danger" id="clear-chat"><i class="fa-solid fa-trash"></i> Hafızayı Temizle</button>
-        
-        <div style="margin-top:auto; font-size:0.75rem; color:var(--text-muted); text-align:center;">
-            Durum: <span id="api-status" style="color:var(--success-color);">Hazır</span>
-        </div>
-    </div>
-
-    <div id="main-area">
+    <main id="main-content">
         <header>
-            <button class="toggle-btn" id="toggle-sidebar" title="Menüyü Aç/Kapat">
-                <i class="fa-solid fa-bars"></i>
-            </button>
-            <div style="flex:1; text-align:center; font-weight:600; letter-spacing:1px;">GÜVENLİ BAĞLANTI PROTOKOLÜ</div>
-            <button class="toggle-btn" onclick="exportChat()" title="Sohbeti İndir">
-                <i class="fa-solid fa-download"></i>
-            </button>
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="search-chat" placeholder="Sohbet içinde ara...">
+            </div>
+            <div style="display:flex; gap:15px;">
+                <button class="icon-btn" title="Karanlık/Aydınlık" id="theme-toggle"><i class="fa-solid fa-moon"></i></button>
+                <button class="icon-btn" title="Hafızayı Temizle" onclick="app.clearCurrentSession()"><i class="fa-solid fa-trash-can"></i></button>
+            </div>
         </header>
 
-        <div id="chat-window">
+        <div id="chat-scroller">
             </div>
 
-        <div id="input-area">
-            <div class="input-container">
-                <button class="action-btn" id="mic-btn" title="Sesli Giriş">
-                    <i class="fa-solid fa-microphone"></i>
-                </button>
-                <textarea id="user-input" placeholder="Sisteme komut ilet..." rows="1"></textarea>
-                <button class="action-btn send" id="send-btn">
-                    <i class="fa-solid fa-paper-plane"></i>
-                </button>
+        <div id="input-container">
+            <div class="input-box-wrapper">
+                <textarea id="user-input" placeholder="Yapay zekaya bir mesaj gönderin..." rows="1"></textarea>
+                <div class="input-actions">
+                    <div class="action-group">
+                        <button class="icon-btn" id="voice-input" title="Sesle Giriş"><i class="fa-solid fa-microphone"></i></button>
+                        <button class="icon-btn" id="file-upload" title="Dosya Ekle"><i class="fa-solid fa-paperclip"></i></button>
+                    </div>
+                    <button class="send-btn" id="send-btn">
+                        <span>Gönder</span>
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </button>
+                </div>
             </div>
+            <p style="text-align:center; font-size:0.7rem; color:var(--text-secondary); margin-top:10px;">
+                ARENTA AI hata yapabilir. Önemli bilgileri kontrol edin.
+            </p>
         </div>
-    </div>
-
-    <div id="toast-container"></div>
+    </main>
 
     <script>
         /**
-         * ARENTA X AI - CORE SCRIPT
-         * Mimari tamamen modüler, hata payı sıfır olacak şekilde tasarlandı.
-         * Herhangi bir API reddi doğrudan yakalanıp analiz edilecek.
+         * ARENTA AI - ÇEKİRDEK MANTIK (CORE LOGIC)
+         * Bu bölüm, uygulamanın durum yönetimini ve API iletişimini sağlar.
          */
 
-        const DOM = {
-            sidebar: document.getElementById('sidebar'),
-            chatWindow: document.getElementById('chat-window'),
-            userInput: document.getElementById('user-input'),
-            sendBtn: document.getElementById('send-btn'),
-            micBtn: document.getElementById('mic-btn'),
-            apiKeyInput: document.getElementById('api-key'),
-            modelSelect: document.getElementById('model-select'),
-            saveBtn: document.getElementById('save-settings'),
-            clearBtn: document.getElementById('clear-chat'),
-            toggleBtn: document.getElementById('toggle-sidebar'),
-            statusText: document.getElementById('api-status'),
-            toastContainer: document.getElementById('toast-container'),
-            voiceSelect: document.getElementById('voice-select')
-        };
+        const API_KEY = "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";
 
-        // --- SISTEM DURUMU (STATE) ---
-        let state = {
-            isProcessing: false,
-            conversation: [],
-            config: {
-                apiKey: DOM.apiKeyInput.value,
-                model: DOM.modelSelect.value,
-                systemPrompt: "Senin adın Arenta X Ai. Türkçe konuşan, teknik becerisi yüksek, siber güvenlik ve yazılım mimarisi konularına hakim, son derece profesyonel bir yapay zekasın."
-            }
-        };
+        const app = {
+            state: {
+                sessions: [],
+                currentSessionId: null,
+                isProcessing: false,
+                theme: 'dark'
+            },
 
-        // --- YEREL DEPOLAMA (LOCAL STORAGE) ---
-        // Sayfa yenilense bile veriler kaybolmaz.
-        function loadStorage() {
-            const savedConfig = localStorage.getItem('arentaConfig');
-            const savedChat = localStorage.getItem('arentaChat');
-
-            if (savedConfig) {
-                state.config = JSON.parse(savedConfig);
-                DOM.apiKeyInput.value = state.config.apiKey;
-                DOM.modelSelect.value = state.config.model;
-            }
-
-            if (savedChat) {
-                state.conversation = JSON.parse(savedChat);
-                renderChatHistory();
-            } else {
-                state.conversation = [{ role: "system", content: state.config.systemPrompt }];
-                addMessageToUI('ai', "Sistem başlatıldı. Veritabanı temiz. Arenta X Ai dinliyor...");
-            }
-        }
-
-        function saveChat() {
-            localStorage.setItem('arentaChat', JSON.stringify(state.conversation));
-        }
-
-        // --- ARAYÜZ ETKİLEŞİMLERİ ---
-        DOM.toggleBtn.onclick = () => DOM.sidebar.classList.toggle('hidden');
-        
-        DOM.saveBtn.onclick = () => {
-            state.config.apiKey = DOM.apiKeyInput.value.trim();
-            state.config.model = DOM.modelSelect.value;
-            localStorage.setItem('arentaConfig', JSON.stringify(state.config));
-            showToast("Ayarlar sisteme kaydedildi.");
-        };
-
-        DOM.clearBtn.onclick = () => {
-            localStorage.removeItem('arentaChat');
-            state.conversation = [{ role: "system", content: state.config.systemPrompt }];
-            DOM.chatWindow.innerHTML = '';
-            addMessageToUI('ai', "Hafıza silindi. Yeni oturum başlatıldı.");
-            window.speechSynthesis.cancel();
-        };
-
-        // Otomatik Textarea yüksekliği
-        DOM.userInput.addEventListener('input', function() {
-            this.style.height = '44px';
-            this.style.height = (this.scrollHeight) + 'px';
-        });
-
-        DOM.userInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                handleSend();
-            }
-        });
-
-        // --- GELİŞMİŞ MARKDOWN & KOD PARSER ---
-        // Herhangi bir harici kütüphane olmadan metni düzgün UI'a çevirir.
-        function parseMarkdown(text) {
-            // Kod blokları (```dil kod ```)
-            let html = text.replace(/```(\w+)?\n([\s\S]*?)```/g, (match, lang, code) => {
-                const safeCode = code.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-                return `<pre><button class="copy-btn" onclick="navigator.clipboard.writeText(this.nextElementSibling.innerText); this.innerText='Kopyalandı'; setTimeout(()=>this.innerText='Kopyala',2000)">Kopyala</button><code>${safeCode}</code></pre>`;
-            });
-
-            // Satır içi kod (`kod`)
-            html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
-            
-            // Kalın yazılar (**yazı**)
-            html = html.replace(/\*\*([^\*]+)\*\*/g, '<strong>$1</strong>');
-            
-            // Satır atlamaları
-            html = html.replace(/\n/g, '<br>');
-            return html;
-        }
-
-        // --- UI MESAJ YÖNETİMİ ---
-        function renderChatHistory() {
-            DOM.chatWindow.innerHTML = '';
-            state.conversation.forEach(msg => {
-                if (msg.role !== 'system') {
-                    addMessageToUI(msg.role === 'assistant' ? 'ai' : 'user', msg.content, null, true);
+            init() {
+                this.loadData();
+                this.bindEvents();
+                if (this.state.sessions.length === 0) {
+                    this.createNewSession();
+                } else {
+                    this.switchSession(this.state.sessions[0].id);
                 }
-            });
-        }
+            },
 
-        function addMessageToUI(role, text, meta = null, isHistory = false, isError = false) {
-            const row = document.createElement('div');
-            row.className = `message-row ${role}`;
+            loadData() {
+                const saved = localStorage.getItem('arenta_data');
+                if (saved) {
+                    this.state.sessions = JSON.parse(saved);
+                }
+            },
 
-            const bubble = document.createElement('div');
-            bubble.className = `message-bubble ${isError ? 'system-error' : ''}`;
-            bubble.innerHTML = parseMarkdown(text);
+            saveData() {
+                localStorage.setItem('arenta_data', JSON.stringify(this.state.sessions));
+            },
 
-            if (meta && !isHistory) {
-                const metaDiv = document.createElement('div');
-                metaDiv.className = 'meta-data';
-                metaDiv.innerHTML = `<span><i class="fa-solid fa-microchip"></i> ${state.config.model}</span> <span>${meta}ms</span>`;
-                bubble.appendChild(metaDiv);
-            }
-
-            row.appendChild(bubble);
-            DOM.chatWindow.appendChild(row);
-            DOM.chatWindow.scrollTop = DOM.chatWindow.scrollHeight;
-        }
-
-        function createTypingIndicator() {
-            const row = document.createElement('div');
-            row.className = 'message-row ai';
-            row.id = 'typing-indicator';
-            row.innerHTML = `<div class="message-bubble" style="padding: 10px 20px;"><i class="fa-solid fa-circle-notch fa-spin" style="color:var(--accent-secondary);"></i> İstek işleniyor...</div>`;
-            DOM.chatWindow.appendChild(row);
-            DOM.chatWindow.scrollTop = DOM.chatWindow.scrollHeight;
-            return row;
-        }
-
-        // --- SES SENTEZİ VE TANIMA (TTS & STT) ---
-        function loadVoices() {
-            if (!window.speechSynthesis) return;
-            const voices = window.speechSynthesis.getVoices();
-            const trVoices = voices.filter(v => v.lang.includes('tr'));
-            
-            trVoices.forEach((voice, index) => {
-                const option = document.createElement('option');
-                option.value = index;
-                option.textContent = voice.name;
-                DOM.voiceSelect.appendChild(option);
-            });
-        }
-        
-        if (window.speechSynthesis) {
-            window.speechSynthesis.onvoiceschanged = loadVoices;
-        }
-
-        function speakAI(text) {
-            if (!window.speechSynthesis) return;
-            window.speechSynthesis.cancel();
-
-            // Sesi bozan kod yapılarını temizle
-            const cleanText = text.replace(/```[\s\S]*?```/g, "Aşağıda bir kod bloğu paylaştım.")
-                                  .replace(/[`*#]/g, "");
-
-            const utterance = new SpeechSynthesisUtterance(cleanText);
-            utterance.lang = 'tr-TR';
-            utterance.rate = 1.05;
-
-            const voices = window.speechSynthesis.getVoices();
-            const selectedIdx = DOM.voiceSelect.value;
-            
-            if (selectedIdx !== "auto" && voices[selectedIdx]) {
-                utterance.voice = voices[selectedIdx];
-            } else {
-                const bestTr = voices.find(v => v.lang === 'tr-TR' && (v.name.includes('Neural') || v.name.includes('Google')));
-                if (bestTr) utterance.voice = bestTr;
-            }
-
-            window.speechSynthesis.speak(utterance);
-        }
-
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        if (SpeechRecognition) {
-            const recognition = new SpeechRecognition();
-            recognition.lang = 'tr-TR';
-            
-            DOM.micBtn.onclick = () => {
-                if (state.isProcessing) return;
-                DOM.micBtn.classList.contains('recording') ? recognition.stop() : recognition.start();
-            };
-
-            recognition.onstart = () => {
-                DOM.micBtn.classList.add('recording');
-                DOM.userInput.placeholder = "Sesli komut dinleniyor...";
-            };
-
-            recognition.onresult = (e) => {
-                DOM.userInput.value = e.results[0][0].transcript;
-            };
-
-            recognition.onend = () => {
-                DOM.micBtn.classList.remove('recording');
-                DOM.userInput.placeholder = "Sisteme komut ilet...";
-            };
-        }
-
-        // --- ÇEKİRDEK: API İLETİŞİMİ VE DETAYLI HATA YÖNETİMİ ---
-        // İşte "Bağlantı Protokolü Hatası"nın nedenini nokta atışı bulacak yer burası.
-        async function fetchAIResponse(userMessage) {
-            const indicator = createTypingIndicator();
-            const startTime = performance.now();
-
-            try {
-                const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-                    method: "POST",
-                    headers: {
-                        "Authorization": `Bearer ${state.config.apiKey}`,
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        model: state.config.model,
-                        messages: state.conversation,
-                        temperature: 0.7,
-                        max_tokens: 2048
-                    })
-                });
-
-                const data = await response.json();
-
-                // Eğer HTTP status 200 (OK) değilse, Groq'un hata mesajını ayrıştır.
-                if (!response.ok) {
-                    let errorMessage = "Bilinmeyen bir API hatası.";
-                    if (data.error && data.error.message) {
-                        errorMessage = data.error.message;
+            bindEvents() {
+                document.getElementById('send-btn').onclick = () => this.handleSendMessage();
+                document.getElementById('new-chat').onclick = () => this.createNewSession();
+                document.getElementById('user-input').oninput = (e) => this.autoGrow(e.target);
+                document.getElementById('user-input').onkeydown = (e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        this.handleSendMessage();
                     }
-                    throw new Error(`Groq API Reddi: ${errorMessage}`);
+                };
+
+                // Arama Fonksiyonu
+                document.getElementById('search-chat').oninput = (e) => this.filterMessages(e.target.value);
+            },
+
+            autoGrow(element) {
+                element.style.height = "24px";
+                element.style.height = (element.scrollHeight) + "px";
+            },
+
+            createNewSession() {
+                const id = Date.now().toString();
+                const newSession = {
+                    id: id,
+                    title: "Yeni Sohbet " + (this.state.sessions.length + 1),
+                    messages: [],
+                    systemPrompt: "Sen yardımsever ve profesyonel bir yapay zekasın."
+                };
+                this.state.sessions.unshift(newSession);
+                this.saveData();
+                this.renderSessionList();
+                this.switchSession(id);
+            },
+
+            switchSession(id) {
+                this.state.currentSessionId = id;
+                this.renderSessionList();
+                this.renderMessages();
+            },
+
+            renderSessionList() {
+                const list = document.getElementById('session-list');
+                list.innerHTML = '';
+                this.state.sessions.forEach(s => {
+                    const item = document.createElement('div');
+                    item.className = `session-item ${s.id === this.state.currentSessionId ? 'active' : ''}`;
+                    item.onclick = () => this.switchSession(s.id);
+                    item.innerHTML = `
+                        <div class="session-title"><i class="fa-regular fa-comment"></i> ${s.title}</div>
+                        <i class="fa-solid fa-xmark" style="font-size:0.7rem; opacity:0.5;" onclick="app.deleteSession('${s.id}', event)"></i>
+                    `;
+                    list.appendChild(item);
+                });
+            },
+
+            async handleSendMessage() {
+                const input = document.getElementById('user-input');
+                const text = input.value.trim();
+                if (!text || this.state.isProcessing) return;
+
+                const session = this.state.sessions.find(s => s.id === this.state.currentSessionId);
+                
+                // Başlık güncelleme (ilk mesajda)
+                if (session.messages.length === 0) {
+                    session.title = text.substring(0, 30) + (text.length > 30 ? "..." : "");
+                    this.renderSessionList();
                 }
 
-                const endTime = performance.now();
-                const aiText = data.choices[0].message.content;
+                // Mesajı ekle
+                const userMsg = { role: 'user', content: text };
+                session.messages.push(userMsg);
+                this.renderMessages();
                 
-                indicator.remove();
-                state.conversation.push({ role: "assistant", content: aiText });
-                saveChat();
+                input.value = '';
+                this.state.isProcessing = true;
+                this.updateUIProcessing(true);
 
-                addMessageToUI('ai', aiText, Math.round(endTime - startTime));
-                speakAI(aiText);
+                try {
+                    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+                        method: "POST",
+                        headers: {
+                            "Authorization": `Bearer ${API_KEY}`,
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            model: document.getElementById('model-engine').value,
+                            messages: [
+                                { role: "system", content: session.systemPrompt },
+                                ...session.messages
+                            ],
+                            temperature: 0.7
+                        })
+                    });
 
-            } catch (error) {
-                indicator.remove();
-                console.error("Red Dev Sistem Logu:", error);
+                    const data = await response.json();
+                    if (data.choices) {
+                        const aiContent = data.choices[0].message.content;
+                        session.messages.push({ role: 'assistant', content: aiContent });
+                        this.saveData();
+                        this.renderMessages();
+                    } else {
+                        throw new Error(data.error.message);
+                    }
+                } catch (error) {
+                    alert("HATA: " + error.message);
+                } finally {
+                    this.state.isProcessing = false;
+                    this.updateUIProcessing(false);
+                }
+            },
+
+            renderMessages() {
+                const container = document.getElementById('chat-scroller');
+                container.innerHTML = '';
+                const session = this.state.sessions.find(s => s.id === this.state.currentSessionId);
                 
-                // Hatayı gizlemiyoruz, kullanıcının yüzüne vuruyoruz ki sorunu çözebilsin.
-                const errorLog = `**SİSTEM ÇÖKME RAPORU**\n\nMaalesef Groq API sunucusu isteği reddetti. Hatanın sebebi aşağıdadır:\n\`\`\`bash\n${error.message}\n\`\`\`\n\n**Olası Çözümler:**\n1. Ayarlar panelindeki API Key (gsk_...) banlanmış veya silinmiş olabilir.\n2. Seçtiğin model (örn: ${state.config.model}) Groq tarafında geçici olarak bakıma alınmış olabilir.\n3. Ayarlar menüsünden API anahtarını yenile ve tekrar dene.`;
+                if (!session) return;
+
+                session.messages.forEach(msg => {
+                    const wrapper = document.createElement('div');
+                    wrapper.className = `message-wrapper ${msg.role === 'assistant' ? 'ai' : 'user'}`;
+                    
+                    wrapper.innerHTML = `
+                        <div class="message-content">
+                            <div class="avatar ${msg.role === 'assistant' ? 'ai-avatar' : 'user-avatar'}">
+                                ${msg.role === 'assistant' ? 'A' : 'S'}
+                            </div>
+                            <div class="text-area">
+                                ${this.parseMarkdown(msg.content)}
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(wrapper);
+                });
+                container.scrollTop = container.scrollHeight;
+            },
+
+            parseMarkdown(text) {
+                // Basit Markdown İşleyici
+                let html = text
+                    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") // Güvenlik
+                    .replace(/```([\s\S]*?)```/g, (m, code) => {
+                        return `<pre><button class="copy-code-btn" onclick="app.copyCode(this)">Kopyala</button><code>${code.trim()}</code></pre>`;
+                    }) // Kod blokları
+                    .replace(/`([^`]+)`/g, '<code>$1</code>') // Satır içi kod
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Kalın
+                    .replace(/\n/g, '<br>'); // Satır atlama
                 
-                addMessageToUI('ai', errorLog, null, false, true);
-                
-                // Hata aldığımız için kullanıcının son mesajını tarihten çıkarıyoruz ki sisteme tekrar göndermeye çalışıp takılmasın.
-                state.conversation.pop(); 
-            } finally {
-                state.isProcessing = false;
-                DOM.sendBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i>';
-                DOM.userInput.disabled = false;
-                DOM.userInput.focus();
+                return html;
+            },
+
+            updateUIProcessing(isProc) {
+                const btn = document.getElementById('send-btn');
+                btn.disabled = isProc;
+                btn.innerHTML = isProc ? '<i class="fa-solid fa-spinner fa-spin"></i>' : '<span>Gönder</span><i class="fa-solid fa-paper-plane"></i>';
+            },
+
+            copyCode(btn) {
+                const code = btn.nextElementSibling.innerText;
+                navigator.clipboard.writeText(code);
+                btn.innerText = "Kopyalandı!";
+                setTimeout(() => btn.innerText = "Kopyala", 2000);
+            },
+
+            deleteSession(id, event) {
+                event.stopPropagation();
+                this.state.sessions = this.state.sessions.filter(s => s.id !== id);
+                if (this.state.currentSessionId === id) {
+                    this.state.currentSessionId = this.state.sessions[0]?.id || null;
+                }
+                if (!this.state.currentSessionId) this.createNewSession();
+                this.saveData();
+                this.renderSessionList();
+                this.renderMessages();
+            },
+
+            clearCurrentSession() {
+                const session = this.state.sessions.find(s => s.id === this.state.currentSessionId);
+                if (session) {
+                    session.messages = [];
+                    this.saveData();
+                    this.renderMessages();
+                }
             }
-        }
-
-        function handleSend() {
-            const text = DOM.userInput.value.trim();
-            if (!text || state.isProcessing) return;
-            if (!state.config.apiKey) {
-                showToast("HATA: API Anahtarı eksik. Lütfen soldaki panelden girin.");
-                DOM.sidebar.classList.remove('hidden');
-                return;
-            }
-
-            state.isProcessing = true;
-            DOM.userInput.value = '';
-            DOM.userInput.style.height = '44px';
-            DOM.sendBtn.innerHTML = '<i class="fa-solid fa-stop"></i>';
-            DOM.userInput.disabled = true;
-
-            // Mikrofon açıksa kapat
-            if (DOM.micBtn.classList.contains('recording')) DOM.micBtn.click();
-
-            addMessageToUI('user', text);
-            state.conversation.push({ role: "user", content: text });
-            
-            fetchAIResponse(text);
-        }
-
-        DOM.sendBtn.onclick = handleSend;
-
-        // --- YARDIMCI FONKSİYONLAR ---
-        function showToast(message) {
-            const toast = document.createElement('div');
-            toast.className = 'toast';
-            toast.innerHTML = `<i class="fa-solid fa-circle-info"></i> ${message}`;
-            DOM.toastContainer.appendChild(toast);
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                toast.style.transform = 'translateX(100%)';
-                toast.style.transition = 'all 0.3s ease';
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
-        }
-
-        function exportChat() {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state.conversation, null, 2));
-            const dlAnchorElem = document.createElement('a');
-            dlAnchorElem.setAttribute("href", dataStr);
-            dlAnchorElem.setAttribute("download", "Arenta_Logs.json");
-            dlAnchorElem.click();
-            showToast("Sohbet kayıtları JSON olarak indirildi.");
-        }
-
-        // --- BAŞLATMA ---
-        window.onload = () => {
-            loadStorage();
-            DOM.userInput.focus();
         };
+
+        // Uygulamayı Başlat
+        window.onload = () => app.init();
 
     </script>
 </body>
