@@ -19,17 +19,15 @@
 <body>
 
 <div id="chat"></div>
-
 <div id="inputArea">
   <input type="text" id="userInput" placeholder="Mesaj yaz...">
   <button onclick="sendMessage()">Gönder</button>
 </div>
-
 <audio id="ttsAudio"></audio>
 
 <script>
-const GROQ_API_KEY = "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";
-const GROQ_API_URL = "https://api.groq.com/v1/llama3.3/completions";
+// Burada backend URL’i Vercel’e deploy ettikten sonra değiştirilecek
+const BACKEND_URL = "https://<senin-vercel-proje>.vercel.app/api/ask";
 
 async function sendMessage() {
   const input = document.getElementById('userInput');
@@ -37,7 +35,6 @@ async function sendMessage() {
   const text  = input.value.trim();
   if (!text) return;
 
-  // Kullanıcı mesajı
   const userMsg = document.createElement('div');
   userMsg.className = 'msg user';
   userMsg.textContent = text;
@@ -46,21 +43,15 @@ async function sendMessage() {
   input.value = '';
 
   try {
-    const res = await fetch(GROQ_API_URL, {
+    const res = await fetch(BACKEND_URL, {
       method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${GROQ_API_KEY}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ prompt: text, max_tokens: 150 })
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text })
     });
 
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
     const data = await res.json();
-    const reply = data.output || data.completion || "Cevap alınamadı";
 
-    // AI mesajı
     const aiMsg = document.createElement('div');
     aiMsg.className = 'msg ai';
     const label = document.createElement('div');
@@ -69,23 +60,25 @@ async function sendMessage() {
     aiMsg.appendChild(label);
 
     const msgText = document.createElement('div');
-    msgText.textContent = reply;
+    msgText.textContent = data.reply;
     aiMsg.appendChild(msgText);
 
     chat.appendChild(aiMsg);
     chat.scrollTop = chat.scrollHeight;
 
-    // Edge TTS ile seslendirme
-    const ttsAudio = document.getElementById('ttsAudio');
-    ttsAudio.src = `https://api.edge-tts.com/speech?text=${encodeURIComponent(reply)}&voice=tr-tr-AhmetNeural`;
-    ttsAudio.play();
-
   } catch(e) {
-    const errMsg = document.createElement('div');
-    errMsg.className = 'msg ai';
-    errMsg.style.background = '#ffdddd';
-    errMsg.textContent = 'Sunucu hatası: ' + e.message;
-    chat.appendChild(errMsg);
+    const aiMsg = document.createElement('div');
+    aiMsg.className = 'msg ai';
+    const label = document.createElement('div');
+    label.className = 'ai-label';
+    label.textContent = 'Arenta X Ai';
+    aiMsg.appendChild(label);
+
+    const msgText = document.createElement('div');
+    msgText.textContent = 'Sunucu hatası: ' + e.message;
+    aiMsg.appendChild(msgText);
+
+    chat.appendChild(aiMsg);
     chat.scrollTop = chat.scrollHeight;
   }
 }
