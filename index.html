@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arenta X Ai Chat</title>
+<style>
+  body { font-family: Arial, sans-serif; background: #f0f0f0; }
+  #chat { max-width: 500px; margin: 50px auto; background: #fff; padding: 10px; border-radius: 10px; height: 500px; overflow-y: auto; }
+  .msg { padding: 8px 12px; margin: 5px; border-radius: 20px; max-width: 70%; position: relative; }
+  .user { background: #dcf8c6; text-align: right; margin-left: auto; }
+  .ai { background: #eee; text-align: left; margin-right: auto; }
+  .ai-label { font-size: 10px; color: #555; margin-bottom: 3px; }
+  #inputArea { max-width: 500px; margin: auto; display: flex; gap: 5px; }
+  #inputArea input { flex: 1; padding: 10px; border-radius: 20px; border: 1px solid #ccc; }
+  #inputArea button { padding: 10px 15px; border: none; border-radius: 20px; background: #4CAF50; color: #fff; cursor: pointer; }
+</style>
+</head>
+<body>
+
+<div id="chat"></div>
+
+<div id="inputArea">
+  <input type="text" id="userInput" placeholder="Mesaj yaz...">
+  <button onclick="sendMessage()">Gönder</button>
+</div>
+
+<audio id="ttsAudio"></audio>
+
+<script>
+const GROQ_API_KEY = "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"; // Senin API key
+const GROQ_API_URL = "https://api.groq.com/v1/llama3.3/completions";
+
+async function sendMessage() {
+  const input = document.getElementById('userInput');
+  const chat  = document.getElementById('chat');
+  const text  = input.value.trim();
+  if (!text) return;
+
+  // Kullanıcı mesajı
+  const userMsg = document.createElement('div');
+  userMsg.className = 'msg user';
+  userMsg.textContent = text;
+  chat.appendChild(userMsg);
+  chat.scrollTop = chat.scrollHeight;
+  input.value = '';
+
+  try {
+    // Groq AI API'ye istek
+    const res = await fetch(GROQ_API_URL, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${GROQ_API_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ prompt: text, max_tokens: 150 })
+    });
+
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+    const data = await res.json();
+
+    // Groq API cevabı
+    const reply = data.output || data.completion || "Cevap alınamadı";
+
+    // AI mesajı
+    const aiMsg = document.createElement('div');
+    aiMsg.className = 'msg ai';
+    
+    const label = document.createElement('div');
+    label.className = 'ai-label';
+    label.textContent = 'Arenta X Ai';
+    aiMsg.appendChild(label);
+
+    const msgText = document.createElement('div');
+    msgText.textContent = reply;
+    aiMsg.appendChild(msgText);
+
+    chat.appendChild(aiMsg);
+    chat.scrollTop = chat.scrollHeight;
+
+    // Edge TTS ile seslendirme (opsiyonel)
+    const ttsAudio = document.getElementById('ttsAudio');
+    ttsAudio.src = `https://api.edge-tts.com/speech?text=${encodeURIComponent(reply)}&voice=tr-tr-AhmetNeural`;
+    ttsAudio.play();
+
+  } catch(e) {
+    const errMsg = document.createElement('div');
+    errMsg.className = 'msg ai';
+    errMsg.style.background = '#ffdddd';
+    errMsg.textContent = 'Sunucu hatası: ' + e.message;
+    chat.appendChild(errMsg);
+    chat.scrollTop = chat.scrollHeight;
+  }
+}
+</script>
+
+</body>
+</html>
