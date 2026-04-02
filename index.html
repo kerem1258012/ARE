@@ -1,1170 +1,606 @@
 <!DOCTYPE html>
-<html lang="tr" dir="ltr">
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="Nexus Platform - Advanced UI">
-    <meta name="theme-color" content="#09090b">
-    <title>Nexus Platform</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARENTA | ENTERPRISE AI OPERATING SYSTEM</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@200;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
+        /* * ARENTA V5.0 - CORE STYLESHEET
+         * Bu bölüm, uygulamanın tüm görsel atomlarını ve animasyon motorunu yönetir.
+         * Tasarım Dili: Glassmorphism 2.0 & Industrial Minimalism.
+         */
         :root {
-            --bg-base: #ffffff;
-            --bg-elevated: #f4f4f5;
-            --bg-element: #e4e4e7;
-            --bg-surface: #fafafa;
-            --border-color: #e4e4e7;
-            --border-hover: #d4d4d8;
-            --text-primary: #09090b;
-            --text-secondary: #71717a;
-            --text-muted: #a1a1aa;
-            --brand-primary: #18181b;
-            --brand-hover: #27272a;
-            --brand-text: #ffffff;
-            --danger-bg: #fef2f2;
-            --danger-text: #ef4444;
-            --success-bg: #ecfdf5;
-            --success-text: #10b981;
-            --warning-bg: #fffbeb;
-            --warning-text: #f59e0b;
-            --radius-xs: 4px;
-            --radius-sm: 6px;
-            --radius-md: 8px;
-            --radius-lg: 12px;
-            --radius-xl: 16px;
-            --radius-full: 9999px;
-            --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
-            --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-            --font-mono: 'Fira Code', monospace;
-            --transition-fast: all 0.1s ease;
-            --transition-base: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            --transition-slow: all 0.3s ease-in-out;
-            --z-index-dropdown: 1000;
-            --z-index-sticky: 1020;
-            --z-index-fixed: 1030;
-            --z-index-modal: 1040;
-            --z-index-popover: 1050;
-            --z-index-tooltip: 1060;
+            /* Renk Paleti - Midnight (Default) */
+            --bg-deep: #020204;
+            --bg-surface: #0a0a0c;
+            --bg-card: #121215;
+            --accent: #6366f1;
+            --accent-glow: rgba(99, 102, 241, 0.4);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-dim: #475569;
+            --border: rgba(255, 255, 255, 0.08);
+            --danger: #ff4757;
+            --success: #2ed573;
+            --warning: #ffa502;
+            --sidebar-width: 320px;
+            --panel-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            --transition-smooth: cubic-bezier(0.16, 1, 0.3, 1);
         }
-        [data-theme="dark"] {
-            --bg-base: #09090b;
-            --bg-elevated: #18181b;
-            --bg-element: #27272a;
-            --bg-surface: #0f0f12;
-            --border-color: #27272a;
-            --border-hover: #3f3f46;
-            --text-primary: #fafafa;
-            --text-secondary: #a1a1aa;
-            --text-muted: #71717a;
-            --brand-primary: #ffffff;
-            --brand-hover: #f4f4f5;
-            --brand-text: #09090b;
-            --danger-bg: #450a0a;
-            --danger-text: #fca5a5;
-            --success-bg: #064e3b;
-            --success-text: #6ee7b7;
-            --warning-bg: #451a03;
-            --warning-text: #fbbf24;
+
+        /* TEMA: MATRIX MODE */
+        body.matrix-mode {
+            --bg-deep: #000000;
+            --bg-surface: #050505;
+            --bg-card: #0a0a0a;
+            --accent: #00ff41;
+            --accent-glow: rgba(0, 255, 65, 0.3);
+            --text-primary: #00ff41;
+            --text-secondary: #008f11;
         }
-        *, *::before, *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            -webkit-tap-highlight-color: transparent;
+
+        /* TEMA: CYBERPUNK MODE */
+        body.cyber-mode {
+            --bg-deep: #0d0221;
+            --bg-surface: #0f0844;
+            --bg-card: #261447;
+            --accent: #ff0055;
+            --accent-glow: rgba(255, 0, 85, 0.4);
+            --text-primary: #ffffff;
+            --text-secondary: #00f3ff;
         }
-        html {
-            font-size: 16px;
-            -webkit-text-size-adjust: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
+
+        /* Reset & Base */
+        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; -webkit-font-smoothing: antialiased; }
+        
         body {
-            font-family: var(--font-sans);
-            background-color: var(--bg-base);
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-deep);
             color: var(--text-primary);
-            line-height: 1.5714;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
             height: 100vh;
             width: 100vw;
-            display: flex;
             overflow: hidden;
-        }
-        a {
-            text-decoration: none;
-            color: inherit;
-            transition: var(--transition-fast);
-        }
-        button, input, textarea, select {
-            font-family: inherit;
-            font-size: inherit;
-            border: none;
-            outline: none;
-            background: none;
-            color: inherit;
-        }
-        button {
-            cursor: pointer;
-            user-select: none;
-        }
-        ul {
-            list-style: none;
-        }
-        img {
-            max-width: 100%;
-            display: block;
-        }
-        .hidden {
-            display: none !important;
-        }
-        .flex {
             display: flex;
+            transition: background-color 0.5s ease;
         }
-        .inline-flex {
-            display: inline-flex;
-        }
-        .items-center {
-            align-items: center;
-        }
-        .justify-center {
-            justify-content: center;
-        }
-        .justify-between {
-            justify-content: space-between;
-        }
-        .flex-col {
-            flex-direction: column;
-        }
-        .flex-wrap {
-            flex-wrap: wrap;
-        }
-        .flex-1 {
-            flex: 1 1 0%;
-        }
-        .gap-1 {
-            gap: 0.25rem;
-        }
-        .gap-2 {
-            gap: 0.5rem;
-        }
-        .gap-3 {
-            gap: 0.75rem;
-        }
-        .gap-4 {
-            gap: 1rem;
-        }
-        .gap-6 {
-            gap: 1.5rem;
-        }
-        .w-full {
-            width: 100%;
-        }
-        .h-full {
-            height: 100%;
-        }
-        .p-2 {
-            padding: 0.5rem;
-        }
-        .p-4 {
-            padding: 1rem;
-        }
-        .px-4 {
-            padding-left: 1rem;
-            padding-right: 1rem;
-        }
-        .py-2 {
-            padding-top: 0.5rem;
-            padding-bottom: 0.5rem;
-        }
-        .mt-2 {
-            margin-top: 0.5rem;
-        }
-        .mb-2 {
-            margin-bottom: 0.5rem;
-        }
-        .text-center {
-            text-align: center;
-        }
-        .text-xs {
-            font-size: 0.75rem;
-        }
-        .text-sm {
-            font-size: 0.875rem;
-        }
-        .font-medium {
-            font-weight: 500;
-        }
-        .font-semibold {
-            font-weight: 600;
-        }
-        .font-bold {
-            font-weight: 700;
-        }
-        .uppercase {
-            text-transform: uppercase;
-        }
-        .tracking-tight {
-            letter-spacing: -0.025em;
-        }
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.625rem 1.25rem;
-            border-radius: var(--radius-md);
-            font-weight: 500;
-            font-size: 0.875rem;
-            transition: var(--transition-base);
-            white-space: nowrap;
-            position: relative;
-            overflow: hidden;
-        }
-        .btn-sm {
-            padding: 0.375rem 0.75rem;
-            font-size: 0.8125rem;
-        }
-        .btn-lg {
-            padding: 0.75rem 1.5rem;
-            font-size: 1rem;
-        }
-        .btn-primary {
-            background-color: var(--brand-primary);
-            color: var(--brand-text);
-            box-shadow: var(--shadow-sm);
-        }
-        .btn-primary:hover:not(:disabled) {
-            background-color: var(--brand-hover);
-            transform: translateY(-1px);
-        }
-        .btn-primary:active:not(:disabled) {
-            transform: translateY(0);
-        }
-        .btn-primary:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-        }
-        .btn-secondary {
-            background-color: var(--bg-element);
-            color: var(--text-primary);
-            border: 1px solid var(--border-color);
-        }
-        .btn-secondary:hover {
-            background-color: var(--border-color);
-        }
-        .btn-ghost {
-            color: var(--text-secondary);
-            padding: 0.5rem;
-            background: transparent;
-        }
-        .btn-ghost:hover {
-            background-color: var(--bg-element);
-            color: var(--text-primary);
-        }
-        .btn-danger {
-            background-color: var(--danger-bg);
-            color: var(--danger-text);
-        }
-        .btn-danger:hover {
-            opacity: 0.9;
-        }
-        .icon-btn {
-            padding: 0.5rem;
-            border-radius: var(--radius-md);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-secondary);
-            transition: var(--transition-base);
-        }
-        .icon-btn:hover {
-            background-color: var(--bg-element);
-            color: var(--text-primary);
-        }
-        .icon-btn svg {
-            width: 1.25rem;
-            height: 1.25rem;
-        }
-        .input-group {
-            margin-bottom: 1.25rem;
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-        }
-        .input-label {
-            display: block;
-            font-size: 0.875rem;
-            font-weight: 500;
-            margin-bottom: 0.5rem;
-            color: var(--text-primary);
-        }
-        .input-wrapper-inner {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-        .input-control {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border-radius: var(--radius-md);
-            border: 1px solid var(--border-color);
-            background-color: var(--bg-base);
-            color: var(--text-primary);
-            font-size: 0.875rem;
-            transition: var(--transition-base);
-        }
-        .input-control:hover {
-            border-color: var(--border-hover);
-        }
-        .input-control:focus {
-            border-color: var(--text-secondary);
-            box-shadow: 0 0 0 2px var(--bg-element);
-        }
-        .input-control::placeholder {
-            color: var(--text-muted);
-        }
-        #toast-container {
+
+        /* --- AUTHENTICATION (KİMLİK DOĞRULAMA) --- */
+        #auth-guard {
             position: fixed;
-            top: 1.5rem;
-            right: 1.5rem;
-            z-index: var(--z-index-tooltip);
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-            pointer-events: none;
-        }
-        .toast {
-            padding: 1rem 1.25rem;
-            border-radius: var(--radius-lg);
-            font-size: 0.875rem;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            box-shadow: var(--shadow-lg);
-            animation: toastSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            min-width: 300px;
-            max-width: 450px;
-            background-color: var(--bg-base);
-            border: 1px solid var(--border-color);
-            pointer-events: auto;
-        }
-        .toast.error {
-            background-color: var(--danger-bg);
-            color: var(--danger-text);
-            border-color: rgba(239, 68, 68, 0.2);
-        }
-        .toast.success {
-            background-color: var(--success-bg);
-            color: var(--success-text);
-            border-color: rgba(16, 185, 129, 0.2);
-        }
-        @keyframes toastSlideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-        @keyframes toastSlideOut {
-            from {
-                transform: translateX(0);
-                opacity: 1;
-            }
-            to {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-        }
-        #view-auth {
-            width: 100%;
-            height: 100%;
+            inset: 0;
+            background: var(--bg-deep);
+            z-index: 99999;
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: var(--bg-elevated);
-            padding: 1.5rem;
+            background-image: radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.05) 0%, transparent 70%);
         }
-        .auth-card {
-            background-color: var(--bg-base);
+
+        .auth-panel {
+            width: 440px;
+            background: var(--bg-card);
+            padding: 50px;
+            border-radius: 32px;
+            border: 1px solid var(--border);
+            box-shadow: var(--panel-shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-panel::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            animation: borderSlide 3s linear infinite;
+        }
+
+        @keyframes borderSlide { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+
+        .auth-brand { text-align: center; margin-bottom: 40px; }
+        .auth-brand h1 { font-size: 2.2rem; font-weight: 800; letter-spacing: -2px; margin-bottom: 8px; }
+        .auth-brand p { color: var(--text-secondary); font-size: 0.9rem; }
+
+        .auth-field { margin-bottom: 25px; }
+        .auth-field label { display: block; font-size: 0.75rem; font-weight: 700; color: var(--text-dim); text-transform: uppercase; margin-bottom: 10px; }
+        
+        .auth-input {
             width: 100%;
-            max-width: 420px;
-            padding: 2.5rem;
-            border-radius: var(--radius-xl);
-            border: 1px solid var(--border-color);
-            box-shadow: var(--shadow-lg);
+            padding: 16px 20px;
+            background: rgba(0,0,0,0.2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            transition: 0.3s;
         }
-        .auth-header {
-            text-align: center;
-            margin-bottom: 2.5rem;
-        }
-        .auth-header h1 {
-            font-size: 1.75rem;
+        .auth-input:focus { border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-glow); background: rgba(0,0,0,0.4); }
+
+        .auth-submit {
+            width: 100%;
+            padding: 16px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 12px;
             font-weight: 700;
-            letter-spacing: -0.05em;
-            margin-bottom: 0.5rem;
-        }
-        .auth-header p {
-            font-size: 0.9375rem;
-            color: var(--text-secondary);
-        }
-        .auth-footer {
-            margin-top: 2rem;
-            text-align: center;
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-        }
-        .auth-link {
-            color: var(--text-primary);
-            font-weight: 600;
+            font-size: 1rem;
             cursor: pointer;
-            text-decoration: none;
-            transition: var(--transition-fast);
-            margin-left: 0.25rem;
-        }
-        .auth-link:hover {
-            text-decoration: underline;
-            text-underline-offset: 4px;
-        }
-        #view-app {
+            transition: 0.3s var(--transition-smooth);
             display: flex;
-            width: 100%;
-            height: 100%;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
-        .app-sidebar {
-            width: 280px;
-            background-color: var(--bg-elevated);
-            border-right: 1px solid var(--border-color);
+        .auth-submit:hover { transform: translateY(-3px); box-shadow: 0 10px 30px var(--accent-glow); }
+
+        .auth-toggle { text-align: center; margin-top: 30px; font-size: 0.85rem; color: var(--text-secondary); }
+        .auth-toggle span { color: var(--accent); cursor: pointer; font-weight: 600; }
+
+        /* --- SİSTEM ANA PANELİ --- */
+        #app-viewport {
+            display: none; /* Sadece Login sonrası görünür */
+            width: 100%; height: 100%;
+            flex-direction: row;
+        }
+
+        /* Sol Sidebar */
+        #sidebar {
+            width: var(--sidebar-width);
+            background: var(--bg-surface);
+            border-right: 1px solid var(--border);
             display: flex;
             flex-direction: column;
+            padding: 30px;
             flex-shrink: 0;
-            z-index: var(--z-index-sticky);
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 1000;
         }
-        .sidebar-header {
-            padding: 1.25rem;
-            border-bottom: 1px solid transparent;
-        }
-        .avatar-circle {
-            width: 36px;
-            height: 36px;
+
+        .ai-logo-box {
+            width: 60px; height: 60px;
             border-radius: 50%;
             overflow: hidden;
-            flex-shrink: 0;
-            background-color: var(--bg-element);
-            border: 1px solid var(--border-color);
+            border: 2px solid var(--accent);
+            background: #000;
+            margin-bottom: 40px;
+            box-shadow: 0 0 20px var(--accent-glow);
         }
-        .avatar-circle img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        .ai-logo-box img { width: 100%; height: 100%; object-fit: cover; }
+
+        .nav-label { font-size: 0.7rem; font-weight: 800; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px; }
+
+        .session-list { flex: 1; overflow-y: auto; margin-bottom: 30px; }
+        .session-item {
+            padding: 14px 18px; border-radius: 14px; margin-bottom: 8px;
+            display: flex; align-items: center; justify-content: space-between;
+            cursor: pointer; color: var(--text-secondary); transition: 0.2s;
+            border: 1px solid transparent;
         }
-        .workspace-name {
-            font-weight: 600;
-            font-size: 0.9375rem;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+        .session-item:hover { background: rgba(255,255,255,0.03); color: white; }
+        .session-item.active { background: rgba(99, 102, 241, 0.1); border-color: rgba(99, 102, 241, 0.2); color: white; }
+
+        /* Profil Kısmı */
+        .profile-card {
+            background: var(--bg-card); padding: 15px; border-radius: 16px; border: 1px solid var(--border);
+            display: flex; align-items: center; gap: 15px; position: relative;
         }
-        .sidebar-content {
-            flex: 1;
-            overflow-y: auto;
-            padding: 0.75rem;
-            display: flex;
-            flex-direction: column;
-            scrollbar-width: thin;
+        .p-avatar { width: 40px; height: 40px; border-radius: 10px; background: var(--accent); display: flex; align-items: center; justify-content: center; font-weight: 800; }
+        .p-info h4 { font-size: 0.85rem; font-weight: 700; }
+        .p-info p { font-size: 0.7rem; color: var(--success); }
+
+        /* Sağ İçerik */
+        #main-content { flex: 1; display: flex; flex-direction: column; background: var(--bg-deep); position: relative; }
+
+        header {
+            height: 80px; border-bottom: 1px solid var(--border); padding: 0 40px;
+            display: flex; align-items: center; justify-content: space-between;
+            background: rgba(10, 10, 12, 0.6); backdrop-filter: blur(20px); z-index: 500;
         }
-        .sidebar-content::-webkit-scrollbar {
-            width: 4px;
+
+        .search-wrapper {
+            background: rgba(255,255,255,0.02); border: 1px solid var(--border);
+            padding: 8px 15px; border-radius: 100px; display: flex; align-items: center; gap: 10px; width: 400px;
         }
-        .sidebar-content::-webkit-scrollbar-thumb {
-            background-color: var(--border-color);
-            border-radius: var(--radius-full);
-        }
-        .history-list {
-            display: flex;
-            flex-direction: column;
-            gap: 0.25rem;
-        }
-        .history-item {
-            padding: 0.625rem 0.75rem;
-            border-radius: var(--radius-md);
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            transition: var(--transition-base);
-            position: relative;
-        }
-        .history-item:hover {
-            background-color: var(--bg-element);
-            color: var(--text-primary);
-        }
-        .history-item.active {
-            background-color: var(--bg-element);
-            color: var(--text-primary);
-            font-weight: 600;
-        }
-        .history-item-text {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            flex: 1;
-        }
-        .sidebar-footer {
-            padding: 1rem 1.25rem;
-            border-top: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background-color: var(--bg-elevated);
-        }
-        .app-main {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            background-color: var(--bg-base);
-            position: relative;
-            min-width: 0;
-        }
-        .app-header {
-            height: 64px;
-            padding: 0 1.5rem;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background-color: rgba(var(--bg-base), 0.8);
-            backdrop-filter: blur(8px);
-            z-index: var(--z-index-sticky);
-        }
-        .chat-container {
-            flex: 1;
-            overflow-y: auto;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
+        .search-wrapper input { background: transparent; border: none; color: white; width: 100%; font-size: 0.85rem; }
+
+        /* Mesaj Penceresi */
+        #chat-window {
+            flex: 1; overflow-y: auto; padding: 40px 18%;
+            display: flex; flex-direction: column; gap: 40px;
             scroll-behavior: smooth;
         }
-        .chat-content-wrapper {
-            max-width: 850px;
-            width: 100%;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            gap: 2.5rem;
-            padding: 3rem 1.5rem;
+
+        .msg-row { display: flex; gap: 20px; animation: msgFade 0.4s var(--transition-smooth); }
+        @keyframes msgFade { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+        .msg-row.user { flex-direction: row-reverse; }
+
+        .msg-bubble {
+            max-width: 80%; padding: 22px 28px; border-radius: 24px;
+            line-height: 1.8; font-size: 1rem; position: relative;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
-        .message-row {
-            display: flex;
-            gap: 1.25rem;
-            width: 100%;
-            animation: messageFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        .ai .msg-bubble { background: var(--bg-card); border: 1px solid var(--border); color: var(--text-primary); border-top-left-radius: 4px; }
+        .user .msg-bubble { background: var(--accent); color: white; border-top-right-radius: 4px; }
+
+        /* Kod Bloğu */
+        pre { background: #000; padding: 20px; border-radius: 14px; margin: 20px 0; overflow-x: auto; border: 1px solid var(--border); position: relative; }
+        code { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #818cf8; }
+
+        /* Giriş Alanı */
+        #input-dock { padding: 30px 18%; background: linear-gradient(transparent, var(--bg-deep) 40%); }
+        .input-box {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: 20px; padding: 12px 24px; display: flex; align-items: flex-end; gap: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5); transition: 0.3s;
         }
-        @keyframes messageFadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .input-box:focus-within { border-color: var(--accent); box-shadow: 0 10px 40px var(--accent-glow); }
+
+        textarea {
+            flex: 1; background: transparent; border: none; color: white;
+            font-size: 1.05rem; padding: 10px 0; resize: none; max-height: 250px; min-height: 28px;
         }
-        .message-row.user {
-            flex-direction: row-reverse;
+
+        .action-btn {
+            width: 48px; height: 48px; border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            background: transparent; border: none; color: var(--text-secondary);
+            cursor: pointer; transition: 0.2s;
         }
-        .message-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: var(--radius-md);
-            background-color: var(--bg-element);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8125rem;
-            font-weight: 700;
-            flex-shrink: 0;
-            box-shadow: var(--shadow-sm);
+        .action-btn:hover { background: rgba(255,255,255,0.05); color: var(--accent); }
+        .send-btn { background: var(--accent); color: white; box-shadow: 0 5px 15px var(--accent-glow); }
+
+        /* Toast Bildirim */
+        #notification-host { position: fixed; top: 30px; right: 30px; z-index: 100000; display: flex; flex-direction: column; gap: 12px; }
+        .toast {
+            padding: 16px 24px; border-radius: 12px; background: var(--bg-card);
+            border: 1px solid var(--border); color: white; font-size: 0.9rem; font-weight: 600;
+            display: flex; align-items: center; gap: 15px; min-width: 300px;
+            animation: toastSlide 0.5s var(--transition-smooth);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
         }
-        .message-row.ai .message-avatar {
-            border-radius: 50%;
-            overflow: hidden;
-            background-color: var(--bg-base);
-            border: 1px solid var(--border-color);
-        }
-        .message-row.ai .message-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .message-body {
-            max-width: 80%;
-            font-size: 0.9375rem;
-            line-height: 1.625;
-            color: var(--text-primary);
-            position: relative;
-        }
-        .message-row.user .message-body {
-            background-color: var(--bg-elevated);
-            padding: 1rem 1.25rem;
-            border-radius: var(--radius-lg);
-            border-top-right-radius: 4px;
-            box-shadow: var(--shadow-sm);
-        }
-        .message-row.ai .message-body {
-            padding: 0.25rem 0;
-        }
-        .message-body p {
-            margin-bottom: 1rem;
-        }
-        .message-body p:last-child {
-            margin-bottom: 0;
-        }
-        .message-body pre {
-            background-color: var(--bg-elevated);
-            padding: 1.25rem;
-            border-radius: var(--radius-lg);
-            overflow-x: auto;
-            margin: 1rem 0;
-            border: 1px solid var(--border-color);
-            font-family: var(--font-mono);
-            font-size: 0.875rem;
-        }
-        .message-body code {
-            font-family: var(--font-mono);
-            font-size: 0.85em;
-            background-color: var(--bg-element);
-            padding: 0.2em 0.4em;
-            border-radius: 4px;
-            font-weight: 500;
-        }
-        .message-body pre code {
-            background-color: transparent;
-            padding: 0;
-            color: inherit;
-        }
-        .message-body ul, .message-body ol {
-            padding-left: 1.5rem;
-            margin-bottom: 1rem;
-        }
-        .message-body li {
-            margin-bottom: 0.5rem;
-        }
-        .input-section {
-            padding: 1.5rem;
-            background: linear-gradient(to top, var(--bg-base) 80%, transparent);
-            border-top: 1px solid transparent;
-            position: relative;
-        }
-        .input-wrapper {
-            max-width: 800px;
-            margin: 0 auto;
-            position: relative;
-            background-color: var(--bg-elevated);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-xl);
-            padding: 0.625rem;
-            display: flex;
-            align-items: flex-end;
-            box-shadow: var(--shadow-md);
-            transition: var(--transition-base);
-        }
-        .input-wrapper:focus-within {
-            border-color: var(--text-secondary);
-            box-shadow: var(--shadow-lg);
-            background-color: var(--bg-base);
-        }
-        .compose-textarea {
-            width: 100%;
-            max-height: 240px;
-            min-height: 44px;
-            padding: 0.625rem 0.875rem;
-            resize: none;
-            color: var(--text-primary);
-            font-size: 1rem;
-            line-height: 1.5;
-            background: transparent;
-        }
-        .compose-textarea::-webkit-scrollbar {
-            width: 4px;
-        }
-        .compose-textarea::-webkit-scrollbar-thumb {
-            background-color: var(--border-color);
-            border-radius: var(--radius-full);
-        }
-        .compose-actions {
-            display: flex;
-            padding: 0.25rem;
-            flex-shrink: 0;
-            gap: 0.5rem;
-        }
-        .send-button {
-            width: 36px;
-            height: 36px;
-            border-radius: var(--radius-md);
-            background-color: var(--brand-primary);
-            color: var(--brand-text);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: var(--transition-base);
-            box-shadow: var(--shadow-sm);
-        }
-        .send-button:hover:not(:disabled) {
-            background-color: var(--brand-hover);
-            transform: scale(1.05);
-        }
-        .send-button:active:not(:disabled) {
-            transform: scale(0.95);
-        }
-        .send-button:disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
-            transform: none;
-        }
-        svg {
-            width: 1.25rem;
-            height: 1.25rem;
-            fill: none;
-            stroke: currentColor;
-            stroke-width: 2;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-        .loading-dots {
-            display: flex;
-            gap: 4px;
-            padding: 0.5rem;
-            align-items: center;
-        }
-        .loading-dots span {
-            width: 6px;
-            height: 6px;
-            background-color: var(--text-muted);
-            border-radius: 50%;
-            animation: dotPulse 1.4s infinite ease-in-out;
-        }
-        .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
-        .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
-        @keyframes dotPulse {
-            0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
-            40% { transform: scale(1); opacity: 1; }
-        }
-        @media (max-width: 768px) {
-            .app-sidebar {
-                position: fixed;
-                left: 0;
-                top: 0;
-                bottom: 0;
-                transform: translateX(-100%);
-            }
-            .app-sidebar.open {
-                transform: translateX(0);
-            }
-            .message-body {
-                max-width: 90%;
-            }
-            .chat-content-wrapper {
-                padding: 1.5rem 1rem;
-            }
-        }
+        @keyframes toastSlide { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+
     </style>
 </head>
-<body data-theme="dark">
-    <div id="toast-container"></div>
-    <div id="view-auth">
-        <div class="auth-card" id="form-login">
-            <div class="auth-header">
-                <h1>Giriş Yap</h1>
-                <p>Nexus Platform'a hoş geldiniz.</p>
+<body class="midnight-mode">
+
+    <div id="notification-host"></div>
+
+    <div id="auth-guard">
+        <div class="auth-panel" id="login-form">
+            <div class="auth-brand">
+                <h1>ARENTA OS</h1>
+                <p>Güvenli veri erişimi için kimlik doğrulayın.</p>
             </div>
-            <form id="login-form">
-                <div class="input-group">
-                    <label class="input-label" for="login-username">Kullanıcı Adı</label>
-                    <div class="input-wrapper-inner">
-                        <input type="text" id="login-username" class="input-control" required autocomplete="username" placeholder="kullanici_adi">
-                    </div>
-                </div>
-                <div class="input-group">
-                    <label class="input-label" for="login-password">Şifre</label>
-                    <div class="input-wrapper-inner">
-                        <input type="password" id="login-password" class="input-control" required autocomplete="current-password" placeholder="••••••••">
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-primary w-full mt-2">Giriş Yap</button>
-            </form>
-            <div class="auth-footer">
-                Hesabınız yok mu? <span class="auth-link" id="go-to-register">Kayıt Ol</span>
+            <div class="auth-field">
+                <label>OPERATÖR KİMLİĞİ</label>
+                <input type="text" id="login-user" class="auth-input" placeholder="admin">
+            </div>
+            <div class="auth-field">
+                <label>ERİŞİM ŞİFRESI</label>
+                <input type="password" id="login-pass" class="auth-input" placeholder="••••••••">
+            </div>
+            <button class="auth-submit" onclick="Arenta.Auth.login()">
+                SİSTEME GİRİŞ YAP <i class="fa-solid fa-arrow-right-to-bracket"></i>
+            </button>
+            <div class="auth-toggle">
+                Erişim yetkiniz yok mu? <span onclick="Arenta.UI.toggleAuth('register')">Operatör Kaydı Oluştur</span>
             </div>
         </div>
-        <div class="auth-card hidden" id="form-register">
-            <div class="auth-header">
-                <h1>Hesap Oluştur</h1>
-                <p>Hızlıca bir profil oluşturun.</p>
+
+        <div class="auth-panel" id="register-form" style="display:none;">
+            <div class="auth-brand">
+                <h1>YENİ KAYIT</h1>
+                <p>Sistem yöneticisi olarak hesap tanımlayın.</p>
             </div>
-            <form id="register-form">
-                <div class="input-group">
-                    <label class="input-label" for="reg-username">Kullanıcı Adı</label>
-                    <div class="input-wrapper-inner">
-                        <input type="text" id="reg-username" class="input-control" required autocomplete="username" placeholder="kullanici_adi">
-                    </div>
-                </div>
-                <div class="input-group">
-                    <label class="input-label" for="reg-password">Şifre</label>
-                    <div class="input-wrapper-inner">
-                        <input type="password" id="reg-password" class="input-control" required autocomplete="new-password" placeholder="••••••••">
-                    </div>
-                </div>
-                <div class="input-group">
-                    <label class="input-label" for="reg-confirm">Şifre Onayı</label>
-                    <div class="input-wrapper-inner">
-                        <input type="password" id="reg-confirm" class="input-control" required autocomplete="new-password" placeholder="••••••••">
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-primary w-full mt-2">Kayıt Ol</button>
-            </form>
-            <div class="auth-footer">
-                Zaten üye misiniz? <span class="auth-link" id="go-to-login">Giriş Yap</span>
+            <div class="auth-field">
+                <label>KULLANICI ADI BELİRLEYİN</label>
+                <input type="text" id="reg-user" class="auth-input">
+            </div>
+            <div class="auth-field">
+                <label>GÜÇLÜ BİR ŞİFRE</label>
+                <input type="password" id="reg-pass" class="auth-input">
+            </div>
+            <button class="auth-submit" onclick="Arenta.Auth.register()">
+                KAYDI TAMAMLA <i class="fa-solid fa-user-plus"></i>
+            </button>
+            <div class="auth-toggle">
+                Zaten kayıtlı mısınız? <span onclick="Arenta.UI.toggleAuth('login')">Giriş Ekranına Dön</span>
             </div>
         </div>
     </div>
-    <div id="view-app" class="hidden">
-        <aside class="app-sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <button class="btn btn-primary w-full flex justify-between items-center" id="btn-new-chat">
-                    <span>Yeni Sohbet</span>
-                    <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                </button>
+
+    <div id="app-viewport">
+        <aside id="sidebar">
+            <div class="ai-logo-box">
+                <img src="https://i.imgur.com/oI8HOo2.png" alt="Arenta Core">
             </div>
-            <div class="sidebar-content">
-                <div class="text-xs font-bold color-text-muted px-2 mb-2 uppercase tracking-tight">Geçmiş</div>
-                <ul class="history-list" id="sidebar-history"></ul>
+            
+            <h3 class="nav-label">Oturum Yönetimi</h3>
+            <button class="auth-submit" style="margin-bottom:25px; padding:12px; background:rgba(255,255,255,0.05); color:white; border:1px solid var(--border);" onclick="Arenta.Chat.newSession()">
+                <i class="fa-solid fa-plus"></i> Yeni Sohbet
+            </button>
+
+            <div class="session-list" id="session-container">
+                </div>
+
+            <h3 class="nav-label">Sistem Ayarları</h3>
+            <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:10px; margin-bottom:25px;">
+                <button class="action-btn" style="border:1px solid var(--border);" onclick="Arenta.UI.setTheme('midnight')" title="Midnight"><i class="fa-solid fa-moon"></i></button>
+                <button class="action-btn" style="border:1px solid var(--border);" onclick="Arenta.UI.setTheme('matrix')" title="Matrix"><i class="fa-solid fa-ghost"></i></button>
+                <button class="action-btn" style="border:1px solid var(--border);" onclick="Arenta.UI.setTheme('cyber')" title="Cyberpunk"><i class="fa-solid fa-bolt"></i></button>
             </div>
-            <div class="sidebar-footer">
-                <div class="flex items-center gap-2">
-                    <div class="message-avatar" id="current-user-avatar">U</div>
-                    <span class="workspace-name" id="current-user-name">Kullanıcı</span>
+
+            <div class="profile-card">
+                <div class="p-avatar" id="user-initial">A</div>
+                <div class="p-info">
+                    <h4 id="user-display-name">Operatör</h4>
+                    <p>Status: Online</p>
                 </div>
-                <div class="flex gap-1">
-                    <button class="icon-btn" id="btn-theme-toggle" title="Görünüm">
-                        <svg viewBox="0 0 24 24" id="theme-icon-sun"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-                    </button>
-                    <button class="icon-btn" id="btn-logout" title="Çıkış">
-                        <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-                    </button>
-                </div>
+                <i class="fa-solid fa-right-from-bracket" style="margin-left:auto; cursor:pointer; opacity:0.5;" onclick="Arenta.Auth.logout()"></i>
             </div>
         </aside>
-        <main class="app-main">
-            <header class="app-header">
-                <div class="flex items-center gap-4">
-                    <button class="icon-btn" id="sidebar-toggle" style="display: none;">
-                        <svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-                    </button>
-                    <div class="workspace-name" id="chat-title">Yeni Sohbet</div>
+
+        <main id="main-content">
+            <header>
+                <div class="search-wrapper">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="chat-search" placeholder="Mesajlar içinde anahtar kelime ara..." oninput="Arenta.Chat.searchMessages(this.value)">
+                </div>
+                <div style="display:flex; gap:15px;">
+                    <button class="action-btn" onclick="Arenta.Chat.exportHistory()" title="Dışa Aktar"><i class="fa-solid fa-cloud-arrow-down"></i></button>
+                    <button class="action-btn" onclick="Arenta.Chat.clearAll()" title="Tümünü Sil"><i class="fa-solid fa-trash-can"></i></button>
                 </div>
             </header>
-            <div class="chat-container" id="chat-scroll-area">
-                <div class="chat-content-wrapper" id="chat-messages"></div>
-            </div>
-            <div class="input-section">
-                <div class="input-wrapper">
-                    <textarea 
-                        id="chat-input" 
-                        class="compose-textarea" 
-                        placeholder="Bir mesaj yazın..." 
-                        rows="1"
-                    ></textarea>
-                    <div class="compose-actions">
-                        <button class="send-button" id="btn-send">
-                            <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-                        </button>
-                    </div>
+
+            <div id="chat-window">
+                </div>
+
+            <div id="input-dock">
+                <div class="input-box">
+                    <button class="action-btn"><i class="fa-solid fa-microphone"></i></button>
+                    <textarea id="user-msg-input" placeholder="Arenta AI'ya bir talimat gönderin..." rows="1" oninput="Arenta.UI.autoResize(this)"></textarea>
+                    <button class="action-btn send-btn" id="send-trigger" onclick="Arenta.Chat.send()">
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </button>
+                </div>
+                <div style="text-align:center; font-size:0.65rem; color:var(--text-dim); margin-top:15px; letter-spacing:1px;">
+                    ARENTA CORE ENGINE V5.0 // END-TO-END ENCRYPTED // AI-NATIVE INTERFACE
                 </div>
             </div>
         </main>
     </div>
+
     <script>
-        const App = (() => {
-            const CONFIG = {
-                API: {
-                    KEY: "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",
-                    URL: "https://api.groq.com/openai/v1/chat/completions",
-                    MODEL: "llama3-8b-8192"
-                },
-                STORAGE: {
-                    USERS: "nexus_users",
-                    SESSIONS: "nexus_sessions_",
-                    THEME: "nexus_theme"
-                },
-                ASSETS: {
-                    AI_LOGO: "https://i.imgur.com/oI8HOo2.png"
-                }
-            };
-            const State = {
-                currentUser: null,
+        /**
+         * ARENTA OS V5.0 - CORE JAVASCRIPT
+         * Gelişmiş API entegrasyonu, veri yönetimi ve UI lojiği.
+         */
+
+        const API_CONFIG = {
+            KEY: "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",
+            MODEL: "llama-3.3-70b-versatile",
+            URL: "https://api.groq.com/openai/v1/chat/completions"
+        };
+
+        const Arenta = {
+            State: {
+                user: null,
                 sessions: [],
-                activeSessionId: null,
-                isPending: false,
-                theme: "dark"
-            };
-            const DOM = {
-                toast: document.getElementById('toast-container'),
-                authView: document.getElementById('view-auth'),
-                appView: document.getElementById('view-app'),
-                loginForm: document.getElementById('login-form'),
-                registerForm: document.getElementById('register-form'),
-                loginCard: document.getElementById('form-login'),
-                registerCard: document.getElementById('form-register'),
-                toRegister: document.getElementById('go-to-register'),
-                toLogin: document.getElementById('go-to-login'),
-                chatInput: document.getElementById('chat-input'),
-                btnSend: document.getElementById('btn-send'),
-                chatMessages: document.getElementById('chat-messages'),
-                chatScroll: document.getElementById('chat-scroll-area'),
-                sidebarHistory: document.getElementById('sidebar-history'),
-                currentUserName: document.getElementById('current-user-name'),
-                btnNewChat: document.getElementById('btn-new-chat'),
-                btnTheme: document.getElementById('btn-theme-toggle'),
-                btnLogout: document.getElementById('btn-logout'),
-                chatTitle: document.getElementById('chat-title')
-            };
-            const Utils = {
-                uuid: () => Math.random().toString(36).substring(2, 11),
-                escape: (str) => {
-                    const map = {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'};
-                    return str.replace(/[&<>"']/g, (m) => map[m]);
+                activeSession: null,
+                isGenerating: false
+            },
+
+            // --- KİMLİK DOĞRULAMA MODÜLÜ ---
+            Auth: {
+                getRegistry: () => JSON.parse(localStorage.getItem('arenta_users') || '[]'),
+                
+                register: function() {
+                    const u = document.getElementById('reg-user').value.trim();
+                    const p = document.getElementById('reg-pass').value.trim();
+                    if(!u || !p) return Arenta.UI.toast("Boş alan bırakılamaz!", "danger");
+
+                    let registry = this.getRegistry();
+                    if(registry.find(x => x.username === u)) return Arenta.UI.toast("Bu operatör zaten kayıtlı!", "danger");
+
+                    registry.push({ username: u, password: btoa(p) }); // Simüle şifreleme
+                    localStorage.setItem('arenta_users', JSON.stringify(registry));
+                    Arenta.UI.toast("Kayıt başarılı! Giriş yapabilirsiniz.", "success");
+                    Arenta.UI.toggleAuth('login');
                 },
-                delay: (ms) => new Promise(res => setTimeout(res, ms)),
-                formatDate: (timestamp) => {
-                    return new Intl.DateTimeFormat('tr-TR', { hour: '2-digit', minute: '2-digit' }).format(timestamp);
-                }
-            };
-            const DB = {
-                saveUser: (user) => {
-                    const users = DB.getUsers();
-                    users.push(user);
-                    localStorage.setItem(CONFIG.STORAGE.USERS, JSON.stringify(users));
-                },
-                getUsers: () => JSON.parse(localStorage.getItem(CONFIG.STORAGE.USERS) || "[]"),
-                saveSession: (userId, session) => {
-                    const sessions = DB.getSessions(userId);
-                    const idx = sessions.findIndex(s => s.id === session.id);
-                    if (idx > -1) sessions[idx] = session;
-                    else sessions.unshift(session);
-                    localStorage.setItem(CONFIG.STORAGE.SESSIONS + userId, JSON.stringify(sessions));
-                },
-                getSessions: (userId) => JSON.parse(localStorage.getItem(CONFIG.STORAGE.SESSIONS + userId) || "[]"),
-                deleteSession: (userId, sessionId) => {
-                    const sessions = DB.getSessions(userId).filter(s => s.id !== sessionId);
-                    localStorage.setItem(CONFIG.STORAGE.SESSIONS + userId, JSON.stringify(sessions));
-                }
-            };
-            const UI = {
-                showToast: (msg, type = 'error') => {
-                    const t = document.createElement('div');
-                    t.className = `toast ${type}`;
-                    t.innerHTML = `<span>${msg}</span>`;
-                    DOM.toast.appendChild(t);
-                    setTimeout(() => {
-                        t.style.animation = 'toastSlideOut 0.4s forwards';
-                        setTimeout(() => t.remove(), 400);
-                    }, 3500);
-                },
-                toggleAuth: (view) => {
-                    if (view === 'register') {
-                        DOM.loginCard.classList.add('hidden');
-                        DOM.registerCard.classList.remove('hidden');
+
+                login: function() {
+                    const u = document.getElementById('login-user').value.trim();
+                    const p = document.getElementById('login-pass').value.trim();
+                    const user = this.getRegistry().find(x => x.username === u && x.password === btoa(p));
+
+                    if(user) {
+                        sessionStorage.setItem('arenta_session', u);
+                        Arenta.UI.toast("Erişim onaylandı. Hoş geldiniz.", "success");
+                        Arenta.Core.init();
                     } else {
-                        DOM.registerCard.classList.add('hidden');
-                        DOM.loginCard.classList.remove('hidden');
+                        Arenta.UI.toast("Hatalı kimlik bilgileri!", "danger");
                     }
                 },
-                autoResize: () => {
-                    DOM.chatInput.style.height = 'auto';
-                    DOM.chatInput.style.height = Math.min(DOM.chatInput.scrollHeight, 240) + 'px';
+
+                logout: () => { sessionStorage.clear(); location.reload(); }
+            },
+
+            // --- SOHBET VE VERİ MODÜLÜ ---
+            Chat: {
+                newSession: function() {
+                    const id = 'sess_' + Date.now();
+                    const newSess = { id, title: "Yeni Analiz", messages: [], timestamp: new Date() };
+                    Arenta.State.sessions.unshift(newSess);
+                    Arenta.State.activeSession = id;
+                    Arenta.Core.save();
+                    Arenta.UI.renderSessions();
+                    Arenta.UI.renderMessages();
                 },
-                scrollToBottom: () => {
-                    DOM.chatScroll.scrollTop = DOM.chatScroll.scrollHeight;
-                },
-                renderHistory: () => {
-                    DOM.sidebarHistory.innerHTML = '';
-                    State.sessions.forEach(s => {
-                        const li = document.createElement('li');
-                        li.className = `history-item ${State.activeSessionId === s.id ? 'active' : ''}`;
-                        li.innerHTML = `
-                            <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-                            <span class="history-item-text">${Utils.escape(s.title)}</span>
-                        `;
-                        li.onclick = () => Chat.loadSession(s.id);
-                        DOM.sidebarHistory.appendChild(li);
-                    });
-                }
-            };
-            const Auth = {
-                register: (e) => {
-                    e.preventDefault();
-                    const u = document.getElementById('reg-username').value.trim();
-                    const p = document.getElementById('reg-password').value;
-                    const c = document.getElementById('reg-confirm').value;
-                    if (u.length < 3) return UI.showToast("Kullanıcı adı çok kısa");
-                    if (p.length < 6) return UI.showToast("Şifre en az 6 karakter olmalı");
-                    if (p !== c) return UI.showToast("Şifreler eşleşmiyor");
-                    if (DB.getUsers().find(x => x.username === u)) return UI.showToast("Bu kullanıcı zaten var");
-                    DB.saveUser({ username: u, password: p });
-                    UI.showToast("Hesap oluşturuldu!", "success");
-                    UI.toggleAuth('login');
-                },
-                login: (e) => {
-                    e.preventDefault();
-                    const u = document.getElementById('login-username').value.trim();
-                    const p = document.getElementById('login-password').value;
-                    const user = DB.getUsers().find(x => x.username === u && x.password === p);
-                    if (!user) return UI.showToast("Geçersiz kullanıcı adı veya şifre");
-                    State.currentUser = user;
-                    Auth.initApp();
-                },
-                initApp: () => {
-                    DOM.authView.classList.add('hidden');
-                    DOM.appView.classList.remove('hidden');
-                    DOM.currentUserName.textContent = State.currentUser.username;
-                    State.sessions = DB.getSessions(State.currentUser.username);
-                    UI.renderHistory();
-                    if (State.sessions.length > 0) Chat.loadSession(State.sessions[0].id);
-                    else Chat.createNew();
-                },
-                logout: () => {
-                    State.currentUser = null;
-                    State.activeSessionId = null;
-                    DOM.appView.classList.add('hidden');
-                    DOM.authView.classList.remove('hidden');
-                }
-            };
-            const Chat = {
-                createNew: () => {
-                    const id = Utils.uuid();
-                    const session = { id, title: "Yeni Sohbet", messages: [], created: Date.now() };
-                    State.activeSessionId = id;
-                    DOM.chatMessages.innerHTML = '';
-                    DOM.chatTitle.textContent = "Yeni Sohbet";
-                    UI.renderHistory();
-                },
-                loadSession: (id) => {
-                    const session = State.sessions.find(s => s.id === id);
-                    if (!session) return;
-                    State.activeSessionId = id;
-                    DOM.chatTitle.textContent = session.title;
-                    DOM.chatMessages.innerHTML = '';
-                    session.messages.forEach(m => Chat.appendMessage(m.role, m.content));
-                    UI.renderHistory();
-                    UI.scrollToBottom();
-                },
-                appendMessage: (role, content) => {
-                    const row = document.createElement('div');
-                    row.className = `message-row ${role}`;
-                    const avatar = role === 'user' ? State.currentUser.username[0].toUpperCase() : `<img src="${CONFIG.ASSETS.AI_LOGO}" alt="AI">`;
-                    row.innerHTML = `
-                        <div class="message-avatar">${avatar}</div>
-                        <div class="message-body">${Utils.escape(content).replace(/\n/g, '<br>')}</div>
-                    `;
-                    DOM.chatMessages.appendChild(row);
-                    UI.scrollToBottom();
-                },
-                sendMessage: async () => {
-                    const content = DOM.chatInput.value.trim();
-                    if (!content || State.isPending) return;
-                    State.isPending = true;
-                    DOM.btnSend.disabled = true;
-                    DOM.chatInput.value = '';
-                    UI.autoResize();
-                    Chat.appendMessage('user', content);
-                    const loading = document.createElement('div');
-                    loading.className = 'message-row ai';
-                    loading.innerHTML = `
-                        <div class="message-avatar"><img src="${CONFIG.ASSETS.AI_LOGO}"></div>
-                        <div class="message-body"><div class="loading-dots"><span></span><span></span><span></span></div></div>
-                    `;
-                    DOM.chatMessages.appendChild(loading);
-                    UI.scrollToBottom();
+
+                send: async function() {
+                    const input = document.getElementById('user-msg-input');
+                    const text = input.value.trim();
+                    if(!text || Arenta.State.isGenerating) return;
+
+                    const sess = Arenta.State.sessions.find(x => x.id === Arenta.State.activeSession);
+                    if(sess.messages.length === 0) sess.title = text.substring(0, 30);
+
+                    sess.messages.push({ role: 'user', content: text });
+                    Arenta.UI.renderMessages();
+                    input.value = '';
+                    input.style.height = '48px';
+
+                    Arenta.State.isGenerating = true;
+                    Arenta.UI.toggleLoading(true);
+
                     try {
-                        const session = State.sessions.find(s => s.id === State.activeSessionId) || {
-                            id: State.activeSessionId,
-                            title: content.substring(0, 30) + "...",
-                            messages: [],
-                            created: Date.now()
-                        };
-                        const response = await fetch(CONFIG.API.URL, {
-                            method: 'POST',
-                            headers: {
-                                'Authorization': `Bearer ${CONFIG.API.KEY}`,
-                                'Content-Type': 'application/json'
-                            },
+                        const response = await fetch(API_CONFIG.URL, {
+                            method: "POST",
+                            headers: { "Authorization": `Bearer ${API_CONFIG.KEY}`, "Content-Type": "application/json" },
                             body: JSON.stringify({
-                                model: CONFIG.API.MODEL,
-                                messages: [...session.messages, { role: 'user', content }]
+                                model: API_CONFIG.MODEL,
+                                messages: [{ role: "system", content: "Sen Arenta AI'sın. Profesyonel, her zaman teknik ve çözüm odaklı cevaplar ver. Markdown kullan." }, ...sess.messages],
+                                temperature: 0.7
                             })
                         });
+
                         const data = await response.json();
-                        loading.remove();
-                        if (data.choices && data.choices[0]) {
-                            const aiMsg = data.choices[0].message.content;
-                            Chat.appendMessage('ai', aiMsg);
-                            session.messages.push({ role: 'user', content }, { role: 'assistant', content: aiMsg });
-                            DB.saveSession(State.currentUser.username, session);
-                            State.sessions = DB.getSessions(State.currentUser.username);
-                            UI.renderHistory();
-                        } else {
-                            throw new Error("API Hatası");
-                        }
-                    } catch (err) {
-                        loading.remove();
-                        UI.showToast("İstek gönderilemedi.");
-                        console.error(err);
+                        const reply = data.choices[0].message.content;
+
+                        sess.messages.push({ role: 'assistant', content: reply });
+                        Arenta.Core.save();
+                        Arenta.UI.renderMessages();
+                    } catch (e) {
+                        Arenta.UI.toast("Sistem Hatası: " + e.message, "danger");
                     } finally {
-                        State.isPending = false;
-                        DOM.btnSend.disabled = false;
+                        Arenta.State.isGenerating = false;
+                        Arenta.UI.toggleLoading(false);
+                    }
+                },
+
+                exportHistory: function() {
+                    const sess = Arenta.State.sessions.find(x => x.id === Arenta.State.activeSession);
+                    const blob = new Blob([JSON.stringify(sess, null, 2)], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url; a.download = `arenta_log_${sess.id}.json`; a.click();
+                }
+            },
+
+            // --- ARAYÜZ MODÜLÜ ---
+            UI: {
+                renderMessages: function() {
+                    const win = document.getElementById('chat-window');
+                    win.innerHTML = '';
+                    const sess = Arenta.State.sessions.find(x => x.id === Arenta.State.activeSession);
+                    if(!sess) return;
+
+                    sess.messages.forEach(m => {
+                        const row = document.createElement('div');
+                        row.className = `msg-row ${m.role === 'assistant' ? 'ai' : 'user'}`;
+                        row.innerHTML = `
+                            ${m.role === 'assistant' ? '<div class="ai-logo-box" style="width:35px; height:35px; margin:0;"><img src="https://i.imgur.com/oI8HOo2.png"></div>' : ''}
+                            <div class="msg-bubble">${this.formatContent(m.content)}</div>
+                        `;
+                        win.appendChild(row);
+                    });
+                    win.scrollTop = win.scrollHeight;
+                },
+
+                formatContent: (text) => {
+                    return text
+                        .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") // XSS Koruma
+                        .replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>')
+                        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                        .replace(/\n/g, '<br>');
+                },
+
+                renderSessions: function() {
+                    const cont = document.getElementById('session-container');
+                    cont.innerHTML = '';
+                    Arenta.State.sessions.forEach(s => {
+                        const el = document.createElement('div');
+                        el.className = `session-item ${s.id === Arenta.State.activeSession ? 'active' : ''}`;
+                        el.onclick = () => { Arenta.State.activeSession = s.id; Arenta.UI.renderMessages(); Arenta.UI.renderSessions(); };
+                        el.innerHTML = `<div style="display:flex; align-items:center; gap:10px;"><i class="fa-regular fa-message"></i> <span>${s.title}</span></div>`;
+                        cont.appendChild(el);
+                    });
+                },
+
+                toast: function(msg, type) {
+                    const host = document.getElementById('notification-host');
+                    const toast = document.createElement('div');
+                    toast.className = 'toast';
+                    toast.style.borderLeft = `4px solid var(--${type})`;
+                    toast.innerHTML = `<i class="fa-solid fa-bell" style="color:var(--${type})"></i> ${msg}`;
+                    host.appendChild(toast);
+                    setTimeout(() => toast.remove(), 4000);
+                },
+
+                setTheme: (t) => {
+                    document.body.className = `${t}-mode`;
+                    Arenta.UI.toast(`Tema Değiştirildi: ${t.toUpperCase()}`, "success");
+                },
+
+                autoResize: (el) => { el.style.height = '28px'; el.style.height = el.scrollHeight + 'px'; },
+
+                toggleAuth: (v) => {
+                    document.getElementById('login-form').style.display = v === 'login' ? 'block' : 'none';
+                    document.getElementById('register-form').style.display = v === 'register' ? 'block' : 'none';
+                },
+
+                toggleLoading: (b) => {
+                    const btn = document.getElementById('send-trigger');
+                    btn.innerHTML = b ? '<i class="fa-solid fa-spinner fa-spin"></i>' : '<i class="fa-solid fa-paper-plane"></i>';
+                    btn.disabled = b;
+                }
+            },
+
+            // --- ÇEKİRDEK MANTIK ---
+            Core: {
+                save: () => localStorage.setItem(`arenta_data_${Arenta.State.user}`, JSON.stringify(Arenta.State.sessions)),
+                
+                load: () => {
+                    const d = localStorage.getItem(`arenta_data_${Arenta.State.user}`);
+                    Arenta.State.sessions = d ? JSON.parse(d) : [];
+                },
+
+                init: function() {
+                    const loggedUser = sessionStorage.getItem('arenta_session');
+                    if(!loggedUser) return;
+
+                    Arenta.State.user = loggedUser;
+                    document.getElementById('auth-guard').style.display = 'none';
+                    document.getElementById('app-viewport').style.display = 'flex';
+                    document.getElementById('user-display-name').innerText = loggedUser;
+                    document.getElementById('user-initial').innerText = loggedUser[0].toUpperCase();
+
+                    this.load();
+                    if(Arenta.State.sessions.length === 0) Arenta.Chat.newSession();
+                    else {
+                        Arenta.State.activeSession = Arenta.State.sessions[0].id;
+                        Arenta.UI.renderSessions();
+                        Arenta.UI.renderMessages();
                     }
                 }
-            };
-            const Events = () => {
-                DOM.toRegister.onclick = () => UI.toggleAuth('register');
-                DOM.toLogin.onclick = () => UI.toggleAuth('login');
-                DOM.loginForm.onsubmit = Auth.login;
-                DOM.registerForm.onsubmit = Auth.register;
-                DOM.btnNewChat.onclick = Chat.createNew;
-                DOM.btnLogout.onclick = Auth.logout;
-                DOM.btnTheme.onclick = () => {
-                    State.theme = State.theme === 'dark' ? 'light' : 'dark';
-                    document.body.setAttribute('data-theme', State.theme);
-                };
-                DOM.chatInput.oninput = UI.autoResize;
-                DOM.chatInput.onkeydown = (e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                        e.preventDefault();
-                        Chat.sendMessage();
-                    }
-                };
-                DOM.btnSend.onclick = Chat.sendMessage;
-            };
-            return {
-                init: () => {
-                    Events();
-                    const savedTheme = localStorage.getItem(CONFIG.STORAGE.THEME) || "dark";
-                    document.body.setAttribute('data-theme', savedTheme);
-                }
-            };
-        })();
-        window.addEventListener('DOMContentLoaded', App.init);
+            }
+        };
+
+        // Klavye Dinleyicisi
+        document.getElementById('user-msg-input').onkeydown = (e) => {
+            if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); Arenta.Chat.send(); }
+        };
+
+        window.onload = () => Arenta.Core.init();
+
     </script>
 </body>
 </html>
